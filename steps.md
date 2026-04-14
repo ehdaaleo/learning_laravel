@@ -22,3 +22,12 @@ then run this command at termianl
     DB_DATABASE=your_db
     DB_USERNAME=root
     DB_PASSWORD=
+
+=> to craete model 
+    -> php artisan make:model Post -m
+
+=> to create seeder 
+  -> php artisan make:seeder PostSeeder
+
+=>  to add controller 
+      =>php artisan make:controller PostController
