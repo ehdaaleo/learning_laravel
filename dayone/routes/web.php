@@ -6,7 +6,7 @@ use App\Http\Controllers\PostController;
 
 Route::get('/', [HomeController::class, 'index']);
 
-Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
-
-Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
-
+Route::get('posts/trashed', [PostController::class, 'trashed'])->name('posts.trashed');
+Route::post('posts/{id}/restore', [PostController::class, 'restore'])->name('posts.restore');
+Route::delete('posts/{id}/force', [PostController::class, 'forceDelete'])->name('posts.force-delete');
+Route::resource('posts', PostController::class);
