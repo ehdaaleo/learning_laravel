@@ -21,21 +21,23 @@
         <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-slate-200 text-sm">
             <thead class="bg-slate-50">
-                <tr>
-                    <th class="px-6 py-4 text-left font-semibold text-slate-600">Title</th>
-                    <th class="px-6 py-4 text-left font-semibold text-slate-600">Description</th>
-                    <th class="px-6 py-4 text-left font-semibold text-slate-600">Created At</th>
-                    <th class="px-6 py-4 text-left font-semibold text-slate-600">Status</th>
-                    <th class="px-6 py-4 text-right font-semibold text-slate-600">Actions</th>
-                </tr>
+                 <tr>
+                     <th class="px-6 py-4 text-left font-semibold text-slate-600">Title</th>
+                     <th class="px-6 py-4 text-left font-semibold text-slate-600">Slug</th>
+                     <th class="px-6 py-4 text-left font-semibold text-slate-600">Description</th>
+                     <th class="px-6 py-4 text-left font-semibold text-slate-600">Created At</th>
+                     <th class="px-6 py-4 text-left font-semibold text-slate-600">Status</th>
+                     <th class="px-6 py-4 text-right font-semibold text-slate-600">Actions</th>
+                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
-                @forelse($posts as $post)
-                    <tr class="align-top">
-                        <td class="px-6 py-4">
-                            <div class="font-semibold text-slate-900">{{ $post->title }}</div>
-                        </td>
-                        <td class="px-6 py-4 text-slate-600">{{ \Illuminate\Support\Str::limit($post->description, 80) }}</td>
+                 @forelse($posts as $post)
+                     <tr class="align-top">
+                         <td class="px-6 py-4">
+                             <div class="font-semibold text-slate-900">{{ $post->title }}</div>
+                         </td>
+                         <td class="px-6 py-4 text-slate-600">{{ $post->slug }}</td>
+                         <td class="px-6 py-4 text-slate-600">{{ \Illuminate\Support\Str::limit($post->description, 80) }}</td>
                         <td class="px-6 py-4 text-slate-600">
                             <div>{{ $post->created_at?->isoFormat('MMM D, YYYY') }}</div>
                             <div class="text-xs text-slate-400">{{ $post->created_at?->diffForHumans() }}</div>
@@ -74,10 +76,10 @@
                             </div>
                         </td>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="px-6 py-10 text-center text-slate-500">No posts found.</td>
-                    </tr>
+                 @empty
+                     <tr>
+                         <td colspan="6" class="px-6 py-10 text-center text-slate-500">No posts found.</td>
+                     </tr>
                 @endforelse
             </tbody>
         </table>

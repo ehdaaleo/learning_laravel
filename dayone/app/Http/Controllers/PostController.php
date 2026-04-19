@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -18,24 +20,32 @@ class PostController extends Controller
 
     public function create(): View
     {
-        return view('posts.create');
+        return view('posts.create', ['post' => null]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StorePostRequest $request): RedirectResponse
     {
-        $validated = $this->validatePost($request);
+        $validated = $request->validated();
+        $validated['user_id'] = auth()->id();
 
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('posts', 'public');
         }
 
-        Post::create($validated);
+        $post = Post::create($validated);
+
+        if ($request->filled('tags')) {
+            $tags = explode(',', $request->tags);
+            $post->syncTags($tags);
+        }
 
         return redirect()->route('posts.index')->with('success', 'Post created successfully.');
     }
 
     public function show(Post $post): View
     {
+        $post->load(['comments.user']);
+
         return view('posts.show', compact('post'));
     }
 
@@ -44,15 +54,23 @@ class PostController extends Controller
         return view('posts.edit', compact('post'));
     }
 
-    public function update(Request $request, Post $post): RedirectResponse
+    public function update(UpdatePostRequest $request, Post $post): RedirectResponse
     {
-        $validated = $this->validatePost($request);
+        $validated = $request->validated();
+        $validated['user_id'] = auth()->id();
 
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('posts', 'public');
         }
 
         $post->update($validated);
+
+        if ($request->filled('tags')) {
+            $tags = explode(',', $request->tags);
+            $post->syncTags($tags);
+        } else {
+            $post->detachTags();
+        }
 
         return redirect()->route('posts.show', $post)->with('success', 'Post updated successfully.');
     }
@@ -87,22 +105,5 @@ class PostController extends Controller
         return redirect()->route('posts.trashed')->with('success', 'Post permanently deleted.');
     }
 
-    private function validatePost(Request $request): array
-    {
-        return $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
-            'image' => ['nullable', 'image', 'max:2048'],
-        ], [
-            'title.required' => 'Please enter a title for the post.',
-            'title.max' => 'The post title must not be longer than 255 characters.',
-            'description.required' => 'Please enter a description for the post.',
-            'image.image' => 'The selected file must be a valid image.',
-            'image.max' => 'The image size must not exceed 2 MB.',
-        ], [
-            'title' => 'post title',
-            'description' => 'post description',
-            'image' => 'post image',
-        ]);
-    }
+
 }
