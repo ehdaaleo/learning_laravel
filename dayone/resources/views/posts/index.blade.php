@@ -12,7 +12,9 @@
         </div>
 
         <div class="flex flex-wrap gap-3">
-            <a href="{{ route('posts.trashed') }}" class="inline-flex items-center justify-center rounded-xl border border-white/20 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10">Trash Only</a>
+            @can('admin')
+                <a href="{{ route('posts.trashed') }}" class="inline-flex items-center justify-center rounded-xl border border-white/20 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10">Trash Only</a>
+            @endcan
             <a href="{{ route('posts.create') }}" class="inline-flex items-center justify-center rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">Create Post</a>
         </div>
     </div>
@@ -65,13 +67,17 @@
                                         <x-button type="danger" size="sm" buttonType="submit">Delete Forever</x-button>
                                     </form>
                                 @else
-                                    <a href="{{ route('posts.edit', $post) }}" class="inline-flex items-center justify-center rounded-xl bg-amber-400 px-3 py-2 text-sm font-semibold text-slate-900 transition hover:bg-amber-300">Edit</a>
+                                    @can('update', $post)
+                                        <a href="{{ route('posts.edit', $post) }}" class="inline-flex items-center justify-center rounded-xl bg-amber-400 px-3 py-2 text-sm font-semibold text-slate-900 transition hover:bg-amber-300">Edit</a>
+                                    @endcan
 
-                                    <form action="{{ route('posts.destroy', $post) }}" method="POST" data-confirm-delete data-confirm-message="Move this post to trash?">
-                                    @csrf
-                                    @method('DELETE')
-                                    <x-button type="danger" size="sm" buttonType="submit">Delete</x-button>
-                                </form>
+                                    @can('delete', $post)
+                                        <form action="{{ route('posts.destroy', $post) }}" method="POST" data-confirm-delete data-confirm-message="Move this post to trash?">
+                                            @csrf
+                                            @method('DELETE')
+                                            <x-button type="danger" size="sm" buttonType="submit">Delete</x-button>
+                                        </form>
+                                    @endcan
                                 @endif
                             </div>
                         </td>

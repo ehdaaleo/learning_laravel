@@ -37,6 +37,10 @@ const submit = () => {
             {{ status }}
         </div>
 
+        <div v-if="$page.props.errors.github" class="mb-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+            {{ $page.props.errors.github }}
+        </div>
+
         <form @submit.prevent="submit">
             <div>
                 <InputLabel for="email" value="Email" />
@@ -94,5 +98,18 @@ const submit = () => {
                 </PrimaryButton>
             </div>
         </form>
+
+        <div class="my-6 flex items-center gap-3">
+            <div class="h-px flex-1 bg-gray-200" />
+            <span class="text-xs font-medium uppercase tracking-wide text-gray-400">or</span>
+            <div class="h-px flex-1 bg-gray-200" />
+        </div>
+
+        <Link
+            :href="route('github.redirect')"
+            class="flex w-full items-center justify-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+        >
+            Continue with GitHub
+        </Link>
     </GuestLayout>
 </template>

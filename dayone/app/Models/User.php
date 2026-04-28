@@ -10,8 +10,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password'])]
-#[Hidden(['password', 'remember_token'])]
+#[Fillable([
+    'name',
+    'email',
+    'password',
+    'is_admin',
+    'github_id',
+    'github_token',
+    'github_refresh_token',
+])]
+#[Hidden(['password', 'remember_token', 'github_token', 'github_refresh_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
@@ -26,7 +34,13 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'is_admin' => 'boolean',
             'password' => 'hashed',
         ];
+    }
+
+    public function isAdmin(): bool
+    {
+        return (bool) $this->is_admin;
     }
 }

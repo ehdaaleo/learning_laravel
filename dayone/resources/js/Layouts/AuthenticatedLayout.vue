@@ -39,6 +39,19 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Dashboard
                                 </NavLink>
+                                <NavLink
+                                    :href="route('posts.index')"
+                                    :active="route().current('posts.*') && !route().current('posts.trashed')"
+                                >
+                                    Posts
+                                </NavLink>
+                                <NavLink
+                                    v-if="$page.props.auth.user?.is_admin"
+                                    :href="route('posts.trashed')"
+                                    :active="route().current('posts.trashed')"
+                                >
+                                    Trash
+                                </NavLink>
                             </div>
                         </div>
 
@@ -145,6 +158,19 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('dashboard')"
                         >
                             Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('posts.index')"
+                            :active="route().current('posts.*') && !route().current('posts.trashed')"
+                        >
+                            Posts
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            v-if="$page.props.auth.user?.is_admin"
+                            :href="route('posts.trashed')"
+                            :active="route().current('posts.trashed')"
+                        >
+                            Trash
                         </ResponsiveNavLink>
                     </div>
 

@@ -64,7 +64,9 @@
 
                 <div class="flex flex-wrap gap-3">
                     <a href="{{ route('posts.index') }}" class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-100">All Posts</a>
-                    <a href="{{ route('posts.edit', $post) }}" class="inline-flex items-center justify-center rounded-xl bg-amber-400 px-4 py-2.5 text-sm font-semibold text-slate-900 transition hover:bg-amber-300">Edit</a>
+                    @can('update', $post)
+                        <a href="{{ route('posts.edit', $post) }}" class="inline-flex items-center justify-center rounded-xl bg-amber-400 px-4 py-2.5 text-sm font-semibold text-slate-900 transition hover:bg-amber-300">Edit</a>
+                    @endcan
                 </div>
             </div>
         </div>

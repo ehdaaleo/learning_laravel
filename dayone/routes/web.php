@@ -21,9 +21,12 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('posts/trashed', [PostController::class, 'trashed'])->name('posts.trashed');
-    Route::post('posts/{id}/restore', [PostController::class, 'restore'])->name('posts.restore');
-    Route::delete('posts/{id}/force', [PostController::class, 'forceDelete'])->name('posts.force-delete');
+    Route::middleware('can:admin')->group(function () {
+        Route::get('posts/trashed', [PostController::class, 'trashed'])->name('posts.trashed');
+        Route::post('posts/{id}/restore', [PostController::class, 'restore'])->name('posts.restore');
+        Route::delete('posts/{id}/force', [PostController::class, 'forceDelete'])->name('posts.force-delete');
+    });
+
     Route::resource('posts', PostController::class);
     Route::post('posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
